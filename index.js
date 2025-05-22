@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+import cors from "cors";
 import path from "path";
 
 //files
@@ -17,6 +18,7 @@ const app = express();
 //middlewars
 
 app.use(express.json());
+app.use(cors)
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -24,6 +26,6 @@ const PORT = process.env.PORT || 3000;
 
 //Routes
 
-app.use ('/api/v1/users', userRoutes);
+app.use ("/api/v1/users", userRoutes);
 
 app.listen(PORT, () => console.log(`Server is Running on port ${PORT}`));
