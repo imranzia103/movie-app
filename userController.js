@@ -10,12 +10,14 @@ import createToken from "../utils/createToken.js";
 
 
 const createUser = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
+  const { name, email, password } = req.body;
 
- if(!username || !email || !password) {
-    res.status(400);
-    throw new Error("Please fill all the fields");
+  console.log(name, email, password);
+  if (!name || !email || !password) {
+    
+    throw new Error("Please fill all fields");
   }
+  
 const userExists = await User.findOne({ email });
   if (userExists) {
     res.status(400);
@@ -28,7 +30,7 @@ const userExists = await User.findOne({ email });
 
 
   const newUser = new User({
-    username,
+    name,
     email,
     password: hashedPassword,
   });
@@ -38,21 +40,21 @@ const userExists = await User.findOne({ email });
    createToken(res, newUser._id);
     res.status(201).json({
       _id: newUser._id,
-      username: newUser.username,
+      name: newUser.name,
       email: newUser.email,
       isAdmin: newUser.isAdmin,
       
     });
 
  } catch (error) {
-   res.status(500);
+   
    throw new Error(" Invalid User Data...");
  }
 
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-const { email, password } = req.body;
+const {  email, password } = req.body;
 console.log(email, password);
 
   
