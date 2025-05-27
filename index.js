@@ -1,31 +1,11 @@
-import express from "express";
-import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
-import cors from "cors";
-import path from "path";
-
-//files
-
-import connectDB from "./config/db.js";
-import userRoutes from "./routes/UserRoutes.js";
-//config
-
-dotenv.config();
-connectDB();
-
+import express from 'express';
+import connectDB from '.mongoos/db/connectDB.js';
 const app = express();
+const port = process.env.PORT || 8000;
+const DATABASE_URL = process.env.DATABASE_URL || 'mongodb://127.0.0.1:27017/movies';
 
-//middlewars
+connectDB (DATABASE_URL);
+  
 
-app.use(express.json());
-app.use(cors)
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.listen(port, () => console.log(`Server is running on port ${port}`));
 
-const PORT = process.env.PORT || 3000;
-
-//Routes
-
-app.use ("/api/v1/users", userRoutes);
-
-app.listen(PORT, () => console.log(`Server is Running on port ${PORT}`));
