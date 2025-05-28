@@ -62,4 +62,4 @@ console.log(email, password);
 
 
 
-export { createUser, loginUser };
+export { createUser };
