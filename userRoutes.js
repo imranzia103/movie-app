@@ -9,8 +9,8 @@ import {
     loginUser,
     logoutCurrentUser,
     getAllUsers,
-    getCurrentUserProfile.
-    updateCurrentUserProfile 
+    getCurrentUserProfile,
+    updateCurrentUserProfile
     
     
 
@@ -33,10 +33,12 @@ router.post ('/auth', loginUser)
 router.post ('/logout', logoutCurrentUser)
 
 
-router.route('/profile').get(authenticate, getCurrentUserProfile).put(authenticate,
-    updateCurrentUserProfile)
+router
+.route('/profile')
+.get(authenticate, getCurrentUserProfile)
+.put(authenticate, updateCurrentUserProfile)
 
-)
+
 
 
 
