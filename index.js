@@ -7,7 +7,7 @@ import path from "path";
 
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
-import genreRoutes from "./routes/GenreRoutes.js";
+import genreRoutes from "./routes/genreRoutes.js"
 
 //config
 
@@ -28,8 +28,8 @@ const PORT = process.env.PORT || 3000;
 //Routes
 
 app.use ("/api/v1/users", userRoutes);
-app.use("/api/v1/genre" , genreRoutes  )
-
+app.use ("/api/v1/genre", genreRoutes);
+app.use ("/api/v1/movie", movieRoutes);
 
 
 
