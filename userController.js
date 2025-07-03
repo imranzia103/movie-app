@@ -1,120 +1,189 @@
-import asyncHandler from "../middlewares/asyncHandler.js";
-import  User  from "../models/User.js";
+import User from "../models/usermodel.js";
 import bcrypt from "bcryptjs";
+import asyncHandler from "../middlewares/asyncHandler.js";
+
 import createToken from "../utils/createToken.js";
 
 const createUser = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
-  if (!username || !email || !password) {
-    throw new Error("Pleade fill all the Inputs");
+  const { userName, email, password } = req.body;
+
+  if (!userName || !email || !password) {
+    throw new Error("Please Fill All the Fields");
   }
 
   const userExists = await User.findOne({ email });
-  if (userExists) res.status(400).send("User already exists");
+  if (userExists) res.status(400).send("User Already Exists???");
+
+  // hashed User Password...
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  const newUser = new User({ username, email, password: hashedPassword });
+  const newUser = new User({
+    userName,
+    email,
+    password: hashedPassword,
+  });
 
   try {
     await newUser.save();
     createToken(res, newUser._id);
 
-    res.status(201).json({
+    res.json({
       _id: newUser._id,
-      username: newUser.username,
+      userName: newUser.userName,
       email: newUser.email,
       isAdmin: newUser.isAdmin,
     });
   } catch (error) {
-    res.status(400);
-    throw new Error("Invalid user data");
+    res.staus(400);
+    throw new Error("Invalid User Data....");
   }
 });
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  console.log(email);
-  console.log(password);
-
   const existingUser = await User.findOne({ email });
+
   if (existingUser) {
     const isPasswordValid = await bcrypt.compare(
       password,
       existingUser.password
     );
+
     if (isPasswordValid) {
       createToken(res, existingUser._id);
 
-      res.status(201).json({
+      res.json({
         _id: existingUser._id,
-        username: existingUser.username,
+        userName: existingUser.unerName,
         email: existingUser.email,
         isAdmin: existingUser.isAdmin,
       });
-      
     } else {
-        res.status(401).json({message: "Invalid Password"})
-
+      res.status(401).json({ message: "Invalid Password" });
     }
-  } else{
-res.status(401).json({message: " User NOt Found"})
-
+  } else {
+    res.status(401).json({ message: "uswer Not Found" });
   }
 });
 
-const logoutCurrentUser = asyncHandler(async (req, res) => {
+const logOutCurrentUser = asyncHandler(async (req, res) => {
+  res.cookie("jwt", "", {
+    httOnly: true,
+    expires: new Date(),
+  });
 
-  res.cookie('jwt','', {
-httpOnly: true,
-expires: new Date(0)
-  })
+  res.status(200).json({ message: "LogOut Sucessfully" });
+});
 
-  res.status(200).json({message: 'Logged out Sucessfully'})
+const updateCurrentUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
 
+  if (user) {
+    user.userName = req.body.userName || user.userName;
+    user.email = req.body.email || user.email;
+    user.isAdmin = Boolean(req.body.isAdmin);
 
-})
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+      user.password = hashedPassword;
+    }
 
-const getAllUsers = asyncHandler(async (req, res)  => {
+    const updatedUser = await user.save();
 
-const users = await User.find({})
-
-res.json(users)
-
-
-})
-
-
-const getCurrentUserProfile = asyncHandler(async(req, res) => {
-
-  const user = await User.findById (req.user._id)
-
-
-  if(user) {
-    res.json ({
-
-      _id : user._id,
-      username : user.name,
-      email: user.email
-    })
-  
-  }else {
-    res.status(404)
-    throw new Error ('User Not Found')
+    res.json({
+      _id: updatedUser._id,
+      userName: updatedUser.userName,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
   }
+});
 
+const getCurrentUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
 
-})
+  if (user) {
+    res.json({
+      _id: user._id,
+      userName: user.userName,
+      email: user.email,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found.");
+  }
+});
 
-const updateCurrentUserProfile
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.json(users);
+});
+
+const deleteUserById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    if (user.isAdmin) {
+      res.status(400);
+      throw new Error("Cannot delete admin user");
+    }
+
+    await User.deleteOne({ _id: user._id });
+    res.json({ message: "User removed" });
+  } else {
+    res.status(404);
+    throw new Error("User not found.");
+  }
+});
+
+const getUserById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id).select("-password");
+
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+const updateUserById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    user.userName = req.body.userName || user.userName;
+    user.email = req.body.email || user.email;
+    user.isAdmin = Boolean(req.body.isAdmin);
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      userName: updatedUser.userName,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
 
 export {
   createUser,
   loginUser,
-  logoutCurrentUser,
-  getAllUsers,
+  logOutCurrentUser,
+  updateCurrentUserProfile,
   getCurrentUserProfile,
-  updateCurrentUserProfile  
+  getAllUsers,
+  getUserById,
+  deleteUserById,
+  updateUserById,
 };

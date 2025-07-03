@@ -1,43 +1,31 @@
-import express from "express";
+import express, { urlencoded } from "express";
+
+import dotenv, { configDotenv } from "dotenv";
 import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
-import path from "path";
-
-//files
-
 import connectDB from "./config/db.js";
-import userRoutes from "./routes/userRoutes.js";
-import genreRoutes from "./routes/genreRoutes.js"
-import movieRoutes from "./routes/movieRoutes.js";
-import uploadRoutes from "./routes/uploadRoutes.js";
+import userRoutes from "./routes/userRoutes.js"
+import categoryRoute from '../backend/routes/categoryRoutes.js';
 
-//config
+
 
 dotenv.config();
-connectDB();
 
 const app = express();
 
-//middlewars
-
-app.use(express.json());
-
-app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(express.json());
+app.use(urlencoded({ extended: true }));
+connectDB();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5173;
+
 
 //Routes
 
-app.use ("/api/v1/users", userRoutes);
-app.use ("/api/v1/genre", genreRoutes);
-app.use ("/api/v1/movie", movieRoutes);
-app.use ("/api/v1/upload", uploadRoutes);
 
-const __dirname = path.resolve();
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/category", categoryRoute);
 
-app.use("/uploads", express.static(path.join(__dirname + "/uploads")));  
-
-
-
-app.listen(PORT, () => console.log(`Server is Running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server is Running on Port : ${PORT}`);
+});

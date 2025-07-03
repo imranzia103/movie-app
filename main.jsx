@@ -10,6 +10,8 @@ import { createBrowserRouter } from "react-router-dom";
 
 //Auth
 
+import AdminRoute from './components/pages/Admin/AdminRoutes.jsx';
+import CategoryList from './components/pages/Admin/CategoryList.jsx';
 
 
 //Resticted
@@ -35,6 +37,10 @@ const router = createBrowserRouter(
 
            <Route path='' element={<PrivateRoute/>}>
            <Route path='/profile' element={<Profile/>}/>
+
+           <Route path='' element={<AdminRoute/>}/>
+           <Route path='/Admin/Product/categories' element={<CategoryList/>}/>
+
 
 
 
