@@ -12,6 +12,9 @@ import { createBrowserRouter } from "react-router-dom";
 
 import AdminRoute from './components/pages/Admin/AdminRoutes.jsx';
 import CategoryList from './components/pages/Admin/CategoryList.jsx';
+import ProductList from './components/pages/Admin/ProductList.jsx';
+import ProductUpdate from './components/pages/Admin/ProductUpdate.jsx'
+import AllProducts from './components/pages/Admin/AllProducts.jsx';
 
 
 //Resticted
@@ -38,8 +41,14 @@ const router = createBrowserRouter(
            <Route path='' element={<PrivateRoute/>}>
            <Route path='/profile' element={<Profile/>}/>
 
-           <Route path='' element={<AdminRoute/>}/>
-           <Route path='/Admin/Product/categories' element={<CategoryList/>}/>
+            <Route path='/admin' element={<AdminRoute/>}/>
+            
+            <Route path="/categorylist" element={<CategoryList />} />
+            <Route path="/productlist" element={<ProductList />} />
+            <Route path="/allproducts" element={<AllProducts />} />
+            <Route path="/ProductUpdate/:_id" element={<ProductUpdate />} />
+
+           
 
 
 
