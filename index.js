@@ -1,31 +1,36 @@
-import express, { urlencoded } from "express";
-
-import dotenv, { configDotenv } from "dotenv";
+import express, {urlencoded} from "express";
 import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
+import path from "path";
+
+//files
+
 import connectDB from "./config/db.js";
-import userRoutes from "./routes/userRoutes.js"
-import categoryRoute from '../backend/routes/categoryRoutes.js';
+import userRoutes from "./routes/userRoutes.js";
+import genreRoutes from "./routes/GenreRoutes.js";
 
-
+//config
 
 dotenv.config();
+connectDB();
 
 const app = express();
 
-app.use(cookieParser());
+//middlewars
+
 app.use(express.json());
+
 app.use(urlencoded({ extended: true }));
-connectDB();
+app.use(cookieParser());
 
-const PORT = process.env.PORT || 5173;
-
+const PORT = process.env.PORT || 3000;
 
 //Routes
 
+app.use ("/api/v1/users", userRoutes);
+app.use("/api/v1/genre" , genreRoutes  )
 
-app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/category", categoryRoute);
 
-app.listen(PORT, () => {
-  console.log(`Server is Running on Port : ${PORT}`);
-});
+
+
+app.listen(PORT, () => console.log(`Server is Running on port ${PORT}`));

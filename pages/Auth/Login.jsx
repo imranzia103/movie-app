@@ -1,11 +1,12 @@
-import React from 'react'
-import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "../../../components/loader";
-import { useLoginMutation } from "../../redux/Api/users";
-import { setCredentials } from "../../redux/features/auth/authSlice";
+import { useLocation, useNavigate } from "react-router";
+import  {useLoginMutation }  from "../../redux/api/users.js";
+import Loader from "../../components/Loader";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { setCredentials } from "../../redux/features/auth/authSlice.js";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -32,38 +33,36 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
-      console.log(res);
       dispatch(setCredentials({ ...res }));
-      navigate(redirect);
-    } catch (err) {
-      toast.error(err?.data?.message || err.error);
+    
+    } catch (error) {
+      toast.error(error?.data?.message || error.message);
     }
   };
 
   return (
-    <div>
-      <section className="pl-[10rem] flex flex-wrap">
-        <div className="mr-[4rem] mt-[5rem]">
-          <h1 className="text-2xl font-semibold mb-4">Sign In</h1>
-
-          <form onSubmit={submitHandler} className="container w-[40rem]">
-            <div className="my-[2rem]">
+    <>
+      <section className=" pl-[10rem] flex flex-wrap ">
+        <div className=" mr-[4rem mt-[5rem]]">
+          <h1 className=" text-2xl font-semibold mb-4">Sign In</h1>
+          <form onSubmit={submitHandler} className=" container w-[40rem]">
+            <div className=" my-[2rem]">
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-white"
+                className=" block text-sm font-medium text-white"
               >
-                Email Address
+                Email Adress
               </label>
               <input
                 type="email"
                 id="email"
-                className="mt-1 p-2 border rounded w-full"
-                placeholder="Enter email"
+                name="email"
                 value={email}
+                placeholder=" Enter Email "
+                className=" mt-1 p-2 border rounded w-full"
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-
             <div className="mb-4">
               <label
                 htmlFor="password"
@@ -80,24 +79,21 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-
             <button
+              className=" bg-pink-500 text-white px-4 py-2 rounded cursor-pointer my-[1rem]"
               disabled={isLoading}
               type="submit"
-              className="bg-pink-500 text-white px-4 py-2 rounded cursor-pointer my-[1rem]"
             >
               {isLoading ? "Signing In..." : "Sign In"}
             </button>
-
             {isLoading && <Loader />}
           </form>
-
           <div className="mt-4">
-            <p className="text-white">
-              New Customer?{" "}
+            <p className=" text-white">
+              New Customer ?{" "}
               <Link
                 to={redirect ? `/register?redirect=${redirect}` : "/register"}
-                className="text-pink-500 hover:underline"
+                className=" text-pink-500 hover:underline"
               >
                 Register
               </Link>
@@ -107,10 +103,10 @@ const Login = () => {
         <img
           src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80"
           alt=""
-          className="h-[65rem] w-[59%] xl:block md:hidden sm:hidden rounded-lg"
+          className="h-[65rem] w-[55%] xl:block md:hidden sm:hidden rounded-lg"
         />
       </section>
-    </div>
+    </>
   );
 };
 

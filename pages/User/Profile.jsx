@@ -1,14 +1,15 @@
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-import Loader from "../../loader";
-import { useProfileMutation } from "../../redux/Api/users";
-import { setCredentials } from "../../redux/features/auth/authSlice";
+import Loader from "../../components/Loader";
+import { useProfileMutation } from "../../redux/api/users.js";
+import { setCredentials } from "../../redux/features/auth/authSlice.js";
 import { Link } from "react-router-dom";
 
 const Profile = () => {
-  const [userName, setUserName] = useState("");
+  const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -19,9 +20,9 @@ const Profile = () => {
     useProfileMutation();
 
   useEffect(() => {
-    setUserName(userInfo.userName);
+    setUserName(userInfo.username);
     setEmail(userInfo.email);
-  }, [userInfo.email, userInfo.userName]);
+  }, [userInfo.email, userInfo.username]);
 
   const dispatch = useDispatch();
 
@@ -33,7 +34,7 @@ const Profile = () => {
       try {
         const res = await updateProfile({
           _id: userInfo._id,
-          userName,
+          username,
           email,
           password,
         }).unwrap();
@@ -57,7 +58,7 @@ const Profile = () => {
                 type="text"
                 placeholder="Enter name"
                 className="form-input p-4 rounded-sm w-full"
-                value={userName}
+                value={username}
                 onChange={(e) => setUserName(e.target.value)}
               />
             </div>
@@ -119,3 +120,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

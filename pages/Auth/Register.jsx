@@ -2,13 +2,13 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "../../loader";
-import { useRegisterMutation } from "../../redux/Api/users";
-import { setCredentials } from "../../redux/features/auth/authSlice";
+import Loader from "../../components/Loader.jsx";
+import { useRegisterMutation } from "../../redux/api/users.js";
+import { setCredentials } from "../../redux/features/auth/authSlice.js";
 import { toast } from "react-toastify";
 
 const Register = () => {
-  const [userName, setName] = useState("");
+  const [username, setname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -37,7 +37,7 @@ const Register = () => {
       toast.error("Passwords do not match");
     } else {
       try {
-        const res = await register({ userName, email, password }).unwrap();
+        const res = await register({ username, email, password }).unwrap();
         dispatch(setCredentials({ ...res }));
         navigate(redirect);
         toast.success("User successfully registered");
@@ -66,8 +66,8 @@ const Register = () => {
               id="name"
               className="mt-1 p-2 border rounded w-full"
               placeholder="Enter name"
-              value={userName}
-              onChange={(e) => setName(e.target.value)}
+              value={username}
+              onChange={(e) => setname(e.target.value)}
             />
           </div>
 
@@ -155,20 +155,3 @@ const Register = () => {
 };
 
 export default Register;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,75 +1,56 @@
-import React from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import store from "./components/redux/store.js";
-import { Provider } from 'react-redux';
-import { Route, RouterProvider, createRoutesFromElements } from "react-router";
+import React from "react";
+import ReactDom from "react-dom/client"; // Corrected import
+
+import { Provider } from "react-redux";
+import Register from "./pages/Auth/Register.jsx";
+import Login from "./pages/Auth/Login.jsx";
+
+
+import "./index.css";
+import App from "./App.jsx";
+import  store  from "./redux/store.js";
+import {
+  Route,
+  RouterProvider,
+  createRoutesFromElements,
+} from "react-router";
 import { createBrowserRouter } from "react-router-dom";
 
 
 //Auth
 
-import AdminRoute from './components/pages/Admin/AdminRoutes.jsx';
-import CategoryList from './components/pages/Admin/CategoryList.jsx';
-import ProductList from './components/pages/Admin/ProductList.jsx';
-import ProductUpdate from './components/pages/Admin/ProductUpdate.jsx'
-import AllProducts from './components/pages/Admin/AllProducts.jsx';
+//Restricted
 
 
-//Resticted
-
-import Login from './components/pages/Auth/Login.jsx';
-import Register from './components/pages/Auth/Register.jsx';
-import PrivateRoute from './components/pages/Auth/PrivateRoute.jsx';
-import Profile from "./components/pages/User/Profile.jsx"
-
-
-
-import Home from './components/pages/Home.jsx';
-
+import Home from "./pages/Home.jsx"
+import PrivateRoute from "./components/PrivateRoute.jsx";
+import Profile from "./pages/User/Profile.jsx";
+import Admin from "./pages/Admin/Admin.jsx";
 
 const router = createBrowserRouter(
-  createRoutesFromElements( 
-    <Route path="/" element={<App />}>
-          <Route index={true} path="/" element={<Home />} />
-          <Route path='/login' element={<Login/>} />
-           <Route path='/register' element={<Register/>} />
+  createRoutesFromElements(
 
+   <Route path="/" element={<App />}>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route index={true} path="/" element={<Home />} />
+      
+      
+       <Route path="" element={<PrivateRoute/>}>
+        <Route path="/profile" element={<Profile />} />
+      
 
+      
+      
+      
 
-           <Route path='' element={<PrivateRoute/>}>
-           <Route path='/profile' element={<Profile/>}/>
-
-            <Route path='/admin' element={<AdminRoute/>}/>
-            
-            <Route path="/categorylist" element={<CategoryList />} />
-            <Route path="/productlist" element={<ProductList />} />
-            <Route path="/allproducts" element={<AllProducts />} />
-            <Route path="/ProductUpdate/:_id" element={<ProductUpdate />} />
-
-           
-
-
-
-
-
-
-
-           </Route>
-
-
-
-  </Route>)
-
+      
+      </Route>
+    </Route>
+  )
 );
-
-createRoot(document.getElementById('root')).render(
-  
+ReactDom.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    
-      <RouterProvider router={router} />
-    
+    <RouterProvider router={router} />
   </Provider>
-  
-)
+);
