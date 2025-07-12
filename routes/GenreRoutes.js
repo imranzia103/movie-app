@@ -15,7 +15,9 @@ import { createGenre } from '../controllers/GenreController.js';
 
 import { authenticate, authorizedAdmin } from '../middlewares/authMiddleware.js';
 
-router.route('/').post(authenticate, authorizedAdmin, createGenre);
+router
+.route('/')
+.post( createGenre);
 
 
 export default router;

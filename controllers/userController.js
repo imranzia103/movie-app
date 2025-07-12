@@ -1,7 +1,9 @@
-import User from "../models/userModel.js";
+
 import asyncHandler from "../middlewares/asyncHandler.js";
 import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
+import User from "../models/usermodel.js";
+
 
 const createUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
@@ -35,8 +37,6 @@ const createUser = asyncHandler(async (req, res) => {
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
-
 
   const existingUser = await User.findOne({ email });
 

@@ -1,7 +1,11 @@
 import express, {urlencoded} from "express";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import path from "path";
+import { createDoc } from "./models/movies.js";
+
+
+
+
 
 //files
 
@@ -13,6 +17,7 @@ import genreRoutes from "./routes/GenreRoutes.js";
 
 dotenv.config();
 connectDB();
+createDoc();
 
 const app = express();
 

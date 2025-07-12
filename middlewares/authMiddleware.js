@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "../middlewares/asyncHandler.js";
 
-import User from "../models/userModel.js";
+import User from "../models/usermodel.js";
 
 //Check If the User is Authenticate OR not....
 
