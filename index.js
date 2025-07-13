@@ -1,23 +1,20 @@
-import express, {urlencoded} from "express";
+import express from "express";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import { createDoc } from "./models/movies.js";
-
-
-
-
+import path from "path";
 
 //files
 
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
-import genreRoutes from "./routes/GenreRoutes.js";
+import genreRoutes from "./routes/genreRoutes.js"
+import movieRoutes from "./routes/movieRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 
 //config
 
 dotenv.config();
 connectDB();
-createDoc();
 
 const app = express();
 
@@ -25,7 +22,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use(urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const PORT = process.env.PORT || 3000;
@@ -33,8 +30,13 @@ const PORT = process.env.PORT || 3000;
 //Routes
 
 app.use ("/api/v1/users", userRoutes);
-app.use("/api/v1/genre" , genreRoutes  )
+app.use ("/api/v1/genre", genreRoutes);
+app.use ("/api/v1/movie", movieRoutes);
+app.use ("/api/v1/upload", uploadRoutes);
 
+const __dirname = path.resolve();
+
+app.use("/uploads", express.static(path.join(__dirname + "/uploads")));  
 
 
 

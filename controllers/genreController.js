@@ -53,4 +53,6 @@ const removeGenre = asyncHandler(async (req, res) => {
   }
 });
 
-export { createGenre, updateGenre, removeGenre };
+
+
+export { createGenre, updateGenre, removeGenre};
