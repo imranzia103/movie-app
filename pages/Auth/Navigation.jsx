@@ -9,7 +9,7 @@ import {
  
 } from "react-icons/ai";
 import { MdOutlineLocalMovies } from "react-icons/md";
-import { FaHeart } from "react-icons/fa";
+
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./Navigation.css";
@@ -112,10 +112,13 @@ const Navigation = () => {
         {dropdownOpen && userInfo && (
           <ul
             className={`absolute right-0 mt-2 mr-14 width-[10rem] space-y-2 bg-white text-gray-600 ${
-              !userInfo.isAdmin ? "-top-20" : "-top-24"
+   //.isAdmin
+              !userInfo? "-top-20" : "-top-24"
             } `}
           >
-            {userInfo.isAdmin && (
+
+
+{userInfo && (
               <>
                 <li>
                   <Link
@@ -176,3 +179,4 @@ const Navigation = () => {
 };
 
 export default Navigation;
+
